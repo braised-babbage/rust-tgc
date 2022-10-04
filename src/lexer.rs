@@ -20,9 +20,9 @@ pub enum TokenKind<'source> {
     Equals,
     NotEquals,   // <>
     LT,          // <
-    LTE,         // <=
+    LE,          // <=
     GT,          // >
-    GTE,         // >=
+    GE,          // >=
     Ampsersand,  // &
     Pipe,        // |
     ColonEquals, // :=
@@ -49,7 +49,7 @@ pub enum TokenKind<'source> {
     // other
     Id(&'source str),
     Num(i32),
-    Quote(&'source str),
+    String(&'source str),
     // exceptional
     EOF,
     Error,
@@ -127,7 +127,7 @@ impl<'source> Lexer<'source> {
             '<' => match self.iter.peek() {
                 Some((_, '=')) => {
                     self.scan_char();
-                    TokenKind::LTE
+                    TokenKind::LE
                 }
                 Some((_, '>')) => {
                     self.scan_char();
@@ -138,7 +138,7 @@ impl<'source> Lexer<'source> {
             '>' => match self.iter.peek() {
                 Some((_, '=')) => {
                     self.scan_char();
-                    TokenKind::GTE
+                    TokenKind::GE
                 }
                 _ => TokenKind::GT,
             },
@@ -206,7 +206,7 @@ impl<'source> Lexer<'source> {
             self.scan_char();
             let end = self.ci;
             Token {
-                kind: TokenKind::Quote(&self.input[(start + 1)..(end - 1)]),
+                kind: TokenKind::String(&self.input[(start + 1)..(end - 1)]),
                 pos: TokenPos { start, end },
             }
         }
@@ -382,9 +382,9 @@ mod tests {
     fn comparisons() {
         let mut lex = Lexer::new("< <= > >= = <>");
         assert_tok!(lex.next_token(), TokenKind::LT);
-        assert_tok!(lex.next_token(), TokenKind::LTE);
+        assert_tok!(lex.next_token(), TokenKind::LE);
         assert_tok!(lex.next_token(), TokenKind::GT);
-        assert_tok!(lex.next_token(), TokenKind::GTE);
+        assert_tok!(lex.next_token(), TokenKind::GE);
         assert_tok!(lex.next_token(), TokenKind::Equals);
         assert_tok!(lex.next_token(), TokenKind::NotEquals);
     }
