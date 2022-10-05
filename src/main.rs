@@ -1,4 +1,5 @@
 pub mod ast;
+pub mod str_intern;
 pub mod lexer;
 
 fn main() {
