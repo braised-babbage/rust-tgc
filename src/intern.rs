@@ -5,7 +5,7 @@ pub struct Symbol {
     idx: usize,
 }
 
-pub struct InternTable<'a> {
+pub struct Interner<'a> {
     entries: HashMap<&'a str, Symbol>,
     names: Vec<&'a str>,
 }
@@ -15,9 +15,9 @@ fn intern(name: &str) -> &'static str {
     Box::leak(Box::new(name.to_string()))
 }
 
-impl<'a> InternTable<'a> {
+impl<'a> Interner<'a> {
     pub fn new() -> Self {
-	InternTable { entries: HashMap::new(), names: vec![] }
+	Interner { entries: HashMap::new(), names: vec![] }
     }
 
     pub fn symbol<'b>(&mut self, name: &'b str) -> Symbol {
@@ -43,7 +43,7 @@ mod tests {
 
     #[test]
     fn symbol_equality_check() {
-	let mut tbl = InternTable::new();
+	let mut tbl = Interner::new();
 
 	let s1 = tbl.symbol("foo");
 	let s2 = tbl.symbol("bar");
@@ -57,7 +57,7 @@ mod tests {
 
     #[test]
     fn mixed_lifetimes() {
-	let mut tbl = InternTable::new();
+	let mut tbl = Interner::new();
 
 	let s1 = tbl.symbol("foo");
 	let s2 = tbl.symbol("foo".to_string().as_str());
