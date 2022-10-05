@@ -1,12 +1,14 @@
-type Pos = i32;
-type Symbol = i32;
+use crate::lexer::TokenPos as Pos;
+use crate::intern::Symbol;
 
+#[derive(Debug, PartialEq)]
 pub enum Var<'a> {
     Simple(Symbol, Pos),
     Field(Box<Var<'a>>, Symbol, Pos),
     Subscript(Box<Var<'a>>, Box<Expr<'a>>, Pos),
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Op {
     Plus,
     Minus,
@@ -20,6 +22,7 @@ pub enum Op {
     Ge,
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Expr<'a> {
     VarRef(Box<Var<'a>>),
     Nil,
@@ -79,6 +82,7 @@ pub enum Expr<'a> {
     },
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Field {
     name: Symbol,
     // todo: escape,
@@ -86,6 +90,7 @@ pub struct Field {
     pos: Pos,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Fundecl<'a> {
     name: Symbol,
     params: Vec<Box<Field>>,
@@ -94,18 +99,21 @@ pub struct Fundecl<'a> {
     pos: Pos,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Typedecl {
     name: Symbol,
     ty: Ty,
     pos: Pos,
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Ty {
     Name(Symbol, Pos),
     Record(Vec<Box<Field>>),
     Array(Symbol, Pos),
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Decl<'a> {
     Function(Vec<Box<Fundecl<'a>>>),
     Var {

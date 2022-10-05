@@ -1,6 +1,6 @@
 use std::{iter::Peekable, str::CharIndices};
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum TokenKind<'source> {
     // symbols
     Comma,
